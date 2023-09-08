@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cycdb7vyg3b6g"
+path="res://.godot/imported/make_sun_disk.glsl-e28d5ab2b9397f34c8e47c5991ac5c95.res"
+
+[deps]
+
+source_file="res://radial_sky_rays/make_sun_disk.glsl"
+dest_files=["res://.godot/imported/make_sun_disk.glsl-e28d5ab2b9397f34c8e47c5991ac5c95.res"]
+
+[params]
+

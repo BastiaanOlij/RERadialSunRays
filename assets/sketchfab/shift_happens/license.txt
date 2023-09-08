@@ -1,0 +1,11 @@
+Model Information:
+* title:	Shift Happens - Forest Diorama
+* source:	https://sketchfab.com/3d-models/shift-happens-forest-diorama-752c12e293e6493282ef1d13772cc17d
+* author:	Klonk Games (https://sketchfab.com/klonkgames)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Shift Happens - Forest Diorama" (https://sketchfab.com/3d-models/shift-happens-forest-diorama-752c12e293e6493282ef1d13772cc17d) by Klonk Games (https://sketchfab.com/klonkgames) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cbr1x5ewihcdd"
+path="res://.godot/imported/overlay.glsl-43443355583dff96b98bee7d5c961d1b.res"
+
+[deps]
+
+source_file="res://radial_sky_rays/overlay.glsl"
+dest_files=["res://.godot/imported/overlay.glsl-43443355583dff96b98bee7d5c961d1b.res"]
+
+[params]
+

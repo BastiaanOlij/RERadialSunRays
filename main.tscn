@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=3 uid="uid://hay7hbv1cp62"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_qjsjl"]
+[ext_resource type="Script" path="res://radial_sky_rays/radial_sky_rays.gd" id="1_ryedd"]
+[ext_resource type="PackedScene" uid="uid://bi5mlcmkojn1h" path="res://assets/sketchfab/shift_happens/scene.gltf" id="2_i5521"]
+[ext_resource type="LabelSettings" uid="uid://ci6w1v6r1ycro" path="res://label_settings.tres" id="4_frs6v"]
+
+[sub_resource type="RenderingEffect" id="RenderingEffect_jcxua"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_ryedd")
+half_size = false
+sun_location = Vector3(-0.628495, 0.599313, -0.495801)
+sun_size = 250.0
+sun_fade_size = 5.0
+radial_blur_samples = 32
+radial_blur_radius = 100.0
+radial_blur_effect_amount = 1.0
+gaussian_blur_size = 16.0
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ptioq"]
+sky_top_color = Color(0.372549, 0.262745, 0.407843, 1)
+sky_horizon_color = Color(0.466667, 0.372549, 0.427451, 1)
+ground_bottom_color = Color(0.168627, 0.137255, 0.0980392, 1)
+ground_horizon_color = Color(0.466667, 0.372549, 0.427451, 1)
+sun_angle_max = 53.82
+
+[sub_resource type="Sky" id="Sky_gkygq"]
+sky_material = SubResource("ProceduralSkyMaterial_ptioq")
+
+[sub_resource type="Environment" id="Environment_kx13e"]
+background_mode = 2
+sky = SubResource("Sky_gkygq")
+ambient_light_sky_contribution = 0.5
+tonemap_mode = 2
+rendering_effects = Array[RenderingEffect]([SubResource("RenderingEffect_jcxua")])
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_qjsjl")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kx13e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.595357, 0.500544, -0.628495, 0.0395373, 0.799538, 0.599313, 0.802488, 0.331956, -0.4958, 0.432422, 1.49795, -0.748976)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.886132, 0.141235, 0.441388, 0.027632, 0.934634, -0.354537, -0.462609, 0.326363, 0.824306, 0.818133, 0.115356, 1.39683)
+
+[node name="ShiftHappens" type="Node3D" parent="."]
+transform = Transform3D(-0.992338, 0, 0.12355, 0, 1, 0, -0.12355, 0, -0.992338, 0, 0, 0)
+
+[node name="scene" parent="ShiftHappens" instance=ExtResource("2_i5521")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, -0.957212, -0.229949)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+
+[node name="Enabled" type="CheckBox" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/VBoxContainer/Enabled"]
+layout_mode = 2
+offset_left = 27.0
+offset_right = 100.0
+offset_bottom = 23.0
+text = "Enabled"
+
+[node name="HalfSize" type="CheckBox" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/VBoxContainer/HalfSize"]
+layout_mode = 2
+offset_left = 27.0
+offset_right = 100.0
+offset_bottom = 23.0
+text = "Half Size"
+
+[node name="CopyrightShiftHappens" type="Label" parent="UI/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Scene: \"Shift Happens - Forest Diorama\"  by Klonk Games - CC-BY-4.0"
+label_settings = ExtResource("4_frs6v")
+
+[connection signal="toggled" from="UI/MarginContainer/VBoxContainer/Enabled" to="." method="_on_enabled_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/VBoxContainer/HalfSize" to="." method="_on_half_size_toggled"]
