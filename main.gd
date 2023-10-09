@@ -8,8 +8,8 @@ var radial_sky_rays : RadialSkyRays
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var environment : Environment = $WorldEnvironment.environment
-	for effect in environment.rendering_effects:
+	var compositor : Compositor = $WorldEnvironment.compositor
+	for effect in compositor.compositor_effects:
 		if effect is RadialSkyRays:
 			radial_sky_rays = effect
 

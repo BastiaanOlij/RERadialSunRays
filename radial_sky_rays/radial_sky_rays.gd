@@ -1,5 +1,5 @@
 @tool
-extends RenderingEffect
+extends CompositorEffect
 class_name RadialSkyRays
 
 # This is a rendering effect implementation that adds a god ray type
@@ -31,7 +31,7 @@ class_name RadialSkyRays
 @export_range(5.0, 50.0) var gaussian_blur_size: float = 16.0
 
 func _init():
-	effect_callback_type = RenderingEffect.EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
+	effect_callback_type = CompositorEffect.EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
 	RenderingServer.call_on_render_thread(_initialize_compute)
 
 func _notification(what):
@@ -132,7 +132,7 @@ func get_sampler_uniform(image : RID, binding : int = 0, linear : bool = true) -
 	return uniform
 
 func _render_callback(p_effect_callback_type, p_render_data):
-	if rd and p_effect_callback_type == RenderingEffect.EFFECT_CALLBACK_TYPE_POST_TRANSPARENT:
+	if rd and p_effect_callback_type == CompositorEffect.EFFECT_CALLBACK_TYPE_POST_TRANSPARENT:
 		# Get our render scene buffers object, this gives us access to our render buffers. 
 		# Note that implementation differs per renderer hence the need for the cast.
 		var render_scene_buffers : RenderSceneBuffersRD = p_render_data.get_render_scene_buffers()

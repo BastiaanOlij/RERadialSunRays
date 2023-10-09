@@ -1,26 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://hay7hbv1cp62"]
+[gd_scene load_steps=11 format=3 uid="uid://hay7hbv1cp62"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_qjsjl"]
-[ext_resource type="Script" path="res://radial_sky_rays/radial_sky_rays.gd" id="1_ryedd"]
 [ext_resource type="PackedScene" uid="uid://bi5mlcmkojn1h" path="res://assets/sketchfab/shift_happens/scene.gltf" id="2_i5521"]
+[ext_resource type="Script" path="res://radial_sky_rays/radial_sky_rays.gd" id="2_sk7g2"]
 [ext_resource type="LabelSettings" uid="uid://ci6w1v6r1ycro" path="res://label_settings.tres" id="4_frs6v"]
-
-[sub_resource type="RenderingEffect" id="RenderingEffect_jcxua"]
-resource_local_to_scene = false
-resource_name = ""
-enabled = true
-effect_callback_type = 4
-needs_motion_vectors = false
-needs_normal_roughness = false
-script = ExtResource("1_ryedd")
-half_size = false
-sun_location = Vector3(-0.628495, 0.599313, -0.495801)
-sun_size = 250.0
-sun_fade_size = 5.0
-radial_blur_samples = 32
-radial_blur_radius = 100.0
-radial_blur_effect_amount = 1.0
-gaussian_blur_size = 16.0
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ptioq"]
 sky_top_color = Color(0.372549, 0.262745, 0.407843, 1)
@@ -37,16 +20,39 @@ background_mode = 2
 sky = SubResource("Sky_gkygq")
 ambient_light_sky_contribution = 0.5
 tonemap_mode = 2
-rendering_effects = Array[RenderingEffect]([SubResource("RenderingEffect_jcxua")])
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_wjgpm"]
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_rmrg6"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_sk7g2")
+half_size = true
+sun_location = Vector3(0, 1, 0)
+sun_size = 150.0
+sun_fade_size = 50.0
+radial_blur_samples = 32
+radial_blur_radius = 150.0
+radial_blur_effect_amount = 0.9
+gaussian_blur_size = 16.0
+
+[sub_resource type="Compositor" id="Compositor_epc3m"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_rmrg6")])
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_qjsjl")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_kx13e")
+camera_attributes = SubResource("CameraAttributesPractical_wjgpm")
+compositor = SubResource("Compositor_epc3m")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.595357, 0.500544, -0.628495, 0.0395373, 0.799538, 0.599313, 0.802488, 0.331956, -0.4958, 0.432422, 1.49795, -0.748976)
+transform = Transform3D(-0.595357, 0.500544, -0.628495, 0.0395373, 0.799538, 0.599313, 0.802488, 0.331956, -0.495801, 0.432422, 1.49795, -0.748976)
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
