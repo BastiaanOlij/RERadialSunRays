@@ -13,7 +13,7 @@ config_version=5
 config/name="Radial Sun Rays (Rendering Effects Demo)"
 config/description="This is a demo loosely based on https://twitter.com/HarryAlisavakis/status/1405807665608015872?s=20"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
 
 [rendering]

@@ -162,9 +162,6 @@ func _render_callback(p_effect_callback_type, p_render_data):
 
 			rd.draw_command_begin_label("Radial Sky Rays", Color(1.0, 1.0, 1.0, 1.0))
 
-			# Barrier
-			rd.barrier(RenderingDevice.BARRIER_MASK_ALL_BARRIERS, RenderingDevice.BARRIER_MASK_COMPUTE)
-
 			# Loop through views just in case we're doing stereo rendering. No extra cost if this is mono.
 			var view_count = render_scene_buffers.get_view_count()
 			for view in range(view_count):
@@ -220,7 +217,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 1)
 				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end(RenderingDevice.BARRIER_MASK_COMPUTE)
+				rd.compute_list_end()
 
 				rd.draw_command_end_label()
 
@@ -255,7 +252,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 1)
 				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end(RenderingDevice.BARRIER_MASK_COMPUTE)
+				rd.compute_list_end()
 
 				rd.draw_command_end_label()
 
@@ -290,7 +287,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 1)
 				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end(RenderingDevice.BARRIER_MASK_COMPUTE)
+				rd.compute_list_end()
 
 				rd.draw_command_end_label()
 
@@ -309,7 +306,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 1)
 				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end(RenderingDevice.BARRIER_MASK_COMPUTE)
+				rd.compute_list_end()
 
 				rd.draw_command_end_label()
 

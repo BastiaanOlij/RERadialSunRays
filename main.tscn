@@ -6,7 +6,7 @@
 [ext_resource type="LabelSettings" uid="uid://ci6w1v6r1ycro" path="res://label_settings.tres" id="4_frs6v"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ptioq"]
-sky_top_color = Color(0.372549, 0.262745, 0.407843, 1)
+sky_top_color = Color(0.212518, 0.141819, 0.235209, 1)
 sky_horizon_color = Color(0.466667, 0.372549, 0.427451, 1)
 ground_bottom_color = Color(0.168627, 0.137255, 0.0980392, 1)
 ground_horizon_color = Color(0.466667, 0.372549, 0.427451, 1)
@@ -32,8 +32,8 @@ needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("2_sk7g2")
 half_size = true
-sun_location = Vector3(0, 1, 0)
-sun_size = 150.0
+sun_location = Vector3(-0.628495, 0.599313, -0.495801)
+sun_size = 250.0
 sun_fade_size = 50.0
 radial_blur_samples = 32
 radial_blur_radius = 150.0
