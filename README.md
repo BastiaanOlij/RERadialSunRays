@@ -3,11 +3,10 @@
 This repository contains a Godot test project that implements a blur based lighting post effect based on the approach defined in this tweet from Harry Alisavakis:
 https://twitter.com/HarryAlisavakis/status/1405807665608015872?s=20
 
-It uses the new Rendering Effects API, you'll need to compile Godot with this PR included: 
-https://github.com/godotengine/godot/pull/80214
+It uses the new Compositor Effects API, available in Godot 4.3.
 
 Note that this project was build as a straight forward implementation of this effect. The blur shaders can definately be optimised a lot, they do not make use of more advanced abilities of compute shaders.
-The goal was to produce an example to showcase how Rendering Effects can be implemented.
+The goal was to produce an example to showcase how Compositor Effects can be implemented.
 
 ![Screenshot](screenshot.png)
 

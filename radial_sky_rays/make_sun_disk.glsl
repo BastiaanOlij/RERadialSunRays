@@ -33,7 +33,7 @@ void main() {
 	// Get our depth
 	vec2 depth_uv = vec2(sundisk_uv) / params.effect_size;
 
-	float depth = textureLod(depth_image, depth_uv, 0).r;
+	float depth = 1.0 - textureLod(depth_image, depth_uv, 0).r;
 	if (depth + epsilon < 1.0) {
 		imageStore(sundisk_image, sundisk_uv, vec4(0.0));
 		return;
