@@ -184,162 +184,163 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				sun_pos.x += eye_offset.x
 				sun_pos.y += eye_offset.y
 
-				##############################################################
-				# Step 1: Render our sundisk
+				if sun_proj.z < 0:
+					##############################################################
+					# Step 1: Render our sundisk
 
-				var uniform = get_sampler_uniform(depth_image)
-				var depth_uniform_set = UniformSetCacheRD.get_cache(sundisk_shader, 0, [ uniform ])
+					var uniform = get_sampler_uniform(depth_image)
+					var depth_uniform_set = UniformSetCacheRD.get_cache(sundisk_shader, 0, [ uniform ])
 
-				uniform = get_image_uniform(texture_image)
-				var texture_uniform_set = UniformSetCacheRD.get_cache(sundisk_shader, 1, [ uniform ])
+					uniform = get_image_uniform(texture_image)
+					var texture_uniform_set = UniformSetCacheRD.get_cache(sundisk_shader, 1, [ uniform ])
 
-				# We don't have structures (yet) so we need to build our push constant
-				# "the hard way"...
-				var push_constant : PackedFloat32Array = PackedFloat32Array()
-				push_constant.push_back(render_size.x)
-				push_constant.push_back(render_size.y)
-				push_constant.push_back(effect_size.x)
-				push_constant.push_back(effect_size.y)
-				push_constant.push_back(sun_pos.x)
-				push_constant.push_back(sun_pos.y)
-				push_constant.push_back(sun_size * (0.5 if half_size else 1.0))
-				push_constant.push_back(sun_fade_size * (0.5 if half_size else 1.0))
+					# We don't have structures (yet) so we need to build our push constant
+					# "the hard way"...
+					var push_constant : PackedFloat32Array = PackedFloat32Array()
+					push_constant.push_back(render_size.x)
+					push_constant.push_back(render_size.y)
+					push_constant.push_back(effect_size.x)
+					push_constant.push_back(effect_size.y)
+					push_constant.push_back(sun_pos.x)
+					push_constant.push_back(sun_pos.y)
+					push_constant.push_back(sun_size * (0.5 if half_size else 1.0))
+					push_constant.push_back(sun_fade_size * (0.5 if half_size else 1.0))
 
-				rd.draw_command_begin_label("Render sundisk " + str(view), Color(1.0, 1.0, 1.0, 1.0))
+					rd.draw_command_begin_label("Render sundisk " + str(view), Color(1.0, 1.0, 1.0, 1.0))
 
-				# Run our compute shader
-				var x_groups = (effect_size.x - 1) / 8 + 1
-				var y_groups = (effect_size.y - 1) / 8 + 1
+					# Run our compute shader
+					var x_groups = (effect_size.x - 1) / 8 + 1
+					var y_groups = (effect_size.y - 1) / 8 + 1
 
-				var compute_list := rd.compute_list_begin()
-				rd.compute_list_bind_compute_pipeline(compute_list, subdisk_pipeline)
-				rd.compute_list_bind_uniform_set(compute_list, depth_uniform_set, 0)
-				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 1)
-				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end()
+					var compute_list := rd.compute_list_begin()
+					rd.compute_list_bind_compute_pipeline(compute_list, subdisk_pipeline)
+					rd.compute_list_bind_uniform_set(compute_list, depth_uniform_set, 0)
+					rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 1)
+					rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+					rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+					rd.compute_list_end()
 
-				rd.draw_command_end_label()
+					rd.draw_command_end_label()
 
-				##############################################################
-				# Step 2: Apply radial blur
+					##############################################################
+					# Step 2: Apply radial blur
 
-				uniform = get_image_uniform(texture_image)
-				texture_uniform_set = UniformSetCacheRD.get_cache(radial_blur_shader, 0, [ uniform ])
+					uniform = get_image_uniform(texture_image)
+					texture_uniform_set = UniformSetCacheRD.get_cache(radial_blur_shader, 0, [ uniform ])
 
-				uniform = get_image_uniform(pong_texture_image)
-				var pong_texture_uniform_set = UniformSetCacheRD.get_cache(radial_blur_shader, 1, [ uniform ])
+					uniform = get_image_uniform(pong_texture_image)
+					var pong_texture_uniform_set = UniformSetCacheRD.get_cache(radial_blur_shader, 1, [ uniform ])
 
-				var center = Vector2(sun_pos.x * 0.5 + 0.5, 1.0 - (sun_pos.y * 0.5 + 0.5))
-				center *= effect_size
+					var center = Vector2(sun_pos.x * 0.5 + 0.5, 1.0 - (sun_pos.y * 0.5 + 0.5))
+					center *= effect_size
 
-				# Update push constant
-				push_constant = PackedFloat32Array()
-				push_constant.push_back(effect_size.x)
-				push_constant.push_back(effect_size.y)
-				push_constant.push_back(center.x)
-				push_constant.push_back(center.y)
-				push_constant.push_back(radial_blur_samples)
-				push_constant.push_back(radial_blur_radius * (0.5 if half_size else 1.0))
-				push_constant.push_back(radial_blur_effect_amount)
-				push_constant.push_back(0.0)
+					# Update push constant
+					push_constant = PackedFloat32Array()
+					push_constant.push_back(effect_size.x)
+					push_constant.push_back(effect_size.y)
+					push_constant.push_back(center.x)
+					push_constant.push_back(center.y)
+					push_constant.push_back(radial_blur_samples)
+					push_constant.push_back(radial_blur_radius * (0.5 if half_size else 1.0))
+					push_constant.push_back(radial_blur_effect_amount)
+					push_constant.push_back(0.0)
 
-				rd.draw_command_begin_label("Apply radial blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
+					rd.draw_command_begin_label("Apply radial blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
 
-				compute_list = rd.compute_list_begin()
-				rd.compute_list_bind_compute_pipeline(compute_list, radial_blur_pipeline)
-				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 0)
-				rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 1)
-				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end()
+					compute_list = rd.compute_list_begin()
+					rd.compute_list_bind_compute_pipeline(compute_list, radial_blur_pipeline)
+					rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 0)
+					rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 1)
+					rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+					rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+					rd.compute_list_end()
 
-				rd.draw_command_end_label()
+					rd.draw_command_end_label()
 
-				# Swap so we know our pong image is our end result
-				var swap = texture_image
-				texture_image = pong_texture_image
-				pong_texture_image = swap
+					# Swap so we know our pong image is our end result
+					var swap = texture_image
+					texture_image = pong_texture_image
+					pong_texture_image = swap
 
-				##############################################################
-				# Step 3: Apply gaussian blur
+					##############################################################
+					# Step 3: Apply gaussian blur
 
-				uniform = get_image_uniform(texture_image)
-				texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 0, [ uniform ])
+					uniform = get_image_uniform(texture_image)
+					texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 0, [ uniform ])
 
-				uniform = get_image_uniform(pong_texture_image)
-				pong_texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 1, [ uniform ])
+					uniform = get_image_uniform(pong_texture_image)
+					pong_texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 1, [ uniform ])
 
-				# Horizontal first
+					# Horizontal first
 
-				# Update push constant
-				push_constant = PackedFloat32Array()
-				push_constant.push_back(effect_size.x)
-				push_constant.push_back(effect_size.y)
-				push_constant.push_back(gaussian_blur_size)
-				push_constant.push_back(0.0)
+					# Update push constant
+					push_constant = PackedFloat32Array()
+					push_constant.push_back(effect_size.x)
+					push_constant.push_back(effect_size.y)
+					push_constant.push_back(gaussian_blur_size)
+					push_constant.push_back(0.0)
 
-				rd.draw_command_begin_label("Apply horizontal gaussian blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
+					rd.draw_command_begin_label("Apply horizontal gaussian blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
 
-				compute_list = rd.compute_list_begin()
-				rd.compute_list_bind_compute_pipeline(compute_list, gaussian_blur_pipeline)
-				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 0)
-				rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 1)
-				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end()
+					compute_list = rd.compute_list_begin()
+					rd.compute_list_bind_compute_pipeline(compute_list, gaussian_blur_pipeline)
+					rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 0)
+					rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 1)
+					rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+					rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+					rd.compute_list_end()
 
-				rd.draw_command_end_label()
+					rd.draw_command_end_label()
 
-				# And vertical
-				push_constant = PackedFloat32Array()
-				push_constant.push_back(effect_size.x)
-				push_constant.push_back(effect_size.y)
-				push_constant.push_back(0.0)
-				push_constant.push_back(gaussian_blur_size)
+					# And vertical
+					push_constant = PackedFloat32Array()
+					push_constant.push_back(effect_size.x)
+					push_constant.push_back(effect_size.y)
+					push_constant.push_back(0.0)
+					push_constant.push_back(gaussian_blur_size)
 
-				rd.draw_command_begin_label("Apply vertical gaussian blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
+					rd.draw_command_begin_label("Apply vertical gaussian blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
 
-				compute_list = rd.compute_list_begin()
-				rd.compute_list_bind_compute_pipeline(compute_list, gaussian_blur_pipeline)
-				rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 0)
-				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 1)
-				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end()
+					compute_list = rd.compute_list_begin()
+					rd.compute_list_bind_compute_pipeline(compute_list, gaussian_blur_pipeline)
+					rd.compute_list_bind_uniform_set(compute_list, pong_texture_uniform_set, 0)
+					rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 1)
+					rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+					rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+					rd.compute_list_end()
 
-				rd.draw_command_end_label()
+					rd.draw_command_end_label()
 
-				##############################################################
-				# Step 4: Overlay
+					##############################################################
+					# Step 4: Overlay
 
-				rd.draw_command_begin_label("Overlay result " + str(view), Color(1.0, 1.0, 1.0, 1.0))
+					rd.draw_command_begin_label("Overlay result " + str(view), Color(1.0, 1.0, 1.0, 1.0))
 
-				uniform = get_sampler_uniform(texture_image)
-				texture_uniform_set = UniformSetCacheRD.get_cache(overlay_shader, 0, [ uniform ])
+					uniform = get_sampler_uniform(texture_image)
+					texture_uniform_set = UniformSetCacheRD.get_cache(overlay_shader, 0, [ uniform ])
 
-				uniform = get_image_uniform(color_image)
-				var color_uniform_set = UniformSetCacheRD.get_cache(overlay_shader, 1, [ uniform ])
+					uniform = get_image_uniform(color_image)
+					var color_uniform_set = UniformSetCacheRD.get_cache(overlay_shader, 1, [ uniform ])
 
-				# Update push constant
-				push_constant = PackedFloat32Array()
-				push_constant.push_back(render_size.x)
-				push_constant.push_back(render_size.y)
-				push_constant.push_back(0.0)
-				push_constant.push_back(0.0)
+					# Update push constant
+					push_constant = PackedFloat32Array()
+					push_constant.push_back(render_size.x)
+					push_constant.push_back(render_size.y)
+					push_constant.push_back(0.0)
+					push_constant.push_back(0.0)
 
-				# Run our compute shader
-				x_groups = (render_size.x - 1) / 8 + 1
-				y_groups = (render_size.y - 1) / 8 + 1
+					# Run our compute shader
+					x_groups = (render_size.x - 1) / 8 + 1
+					y_groups = (render_size.y - 1) / 8 + 1
 
-				compute_list = rd.compute_list_begin()
-				rd.compute_list_bind_compute_pipeline(compute_list, overlay_pipeline)
-				rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 0)
-				rd.compute_list_bind_uniform_set(compute_list, color_uniform_set, 1)
-				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-				rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
-				rd.compute_list_end()
+					compute_list = rd.compute_list_begin()
+					rd.compute_list_bind_compute_pipeline(compute_list, overlay_pipeline)
+					rd.compute_list_bind_uniform_set(compute_list, texture_uniform_set, 0)
+					rd.compute_list_bind_uniform_set(compute_list, color_uniform_set, 1)
+					rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+					rd.compute_list_dispatch(compute_list, x_groups, y_groups, 1)
+					rd.compute_list_end()
 
-				rd.draw_command_end_label()
+					rd.draw_command_end_label()
 
 			rd.draw_command_end_label()
