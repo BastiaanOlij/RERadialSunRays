@@ -180,7 +180,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				var sun_dist = 10000.0
 				var adj_sun_loc = view_matrix * Vector3(sun_location.x * sun_dist, sun_location.y * sun_dist, sun_location.z * sun_dist)
 				var sun_proj : Vector4 = projection * Vector4(adj_sun_loc.x, adj_sun_loc.y, adj_sun_loc.z, 1.0)
-				var sun_pos : Vector2 = Vector2(sun_proj.x / sun_proj.w, sun_proj.y / sun_proj.w)
+				var sun_pos : Vector2 = Vector2(sun_proj.x / sun_proj.w, -sun_proj.y / sun_proj.w)
 				sun_pos.x += eye_offset.x
 				sun_pos.y += eye_offset.y
 
