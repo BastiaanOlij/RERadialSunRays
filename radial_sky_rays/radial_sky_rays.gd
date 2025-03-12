@@ -131,8 +131,12 @@ func get_sampler_uniform(image : RID, binding : int = 0, linear : bool = true) -
 
 	return uniform
 
+## Pipeline Validation
+func validate_pipelines():
+	return subdisk_pipeline.is_valid() && overlay_pipeline.is_valid() && radial_blur_pipeline.is_valid() && gaussian_blur_pipeline.is_valid()
+
 func _render_callback(p_effect_callback_type, p_render_data):
-	if rd and p_effect_callback_type == CompositorEffect.EFFECT_CALLBACK_TYPE_POST_TRANSPARENT:
+	if rd and p_effect_callback_type == CompositorEffect.EFFECT_CALLBACK_TYPE_POST_TRANSPARENT && validate_pipelines():
 		# Get our render scene buffers object, this gives us access to our render buffers. 
 		# Note that implementation differs per renderer hence the need for the cast.
 		var render_scene_buffers : RenderSceneBuffersRD = p_render_data.get_render_scene_buffers()
