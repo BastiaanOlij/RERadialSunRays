@@ -1,8 +1,8 @@
 [gd_scene load_steps=11 format=3 uid="uid://hay7hbv1cp62"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_qjsjl"]
+[ext_resource type="Script" uid="uid://b57rkjx1rhv4l" path="res://main.gd" id="1_qjsjl"]
 [ext_resource type="PackedScene" uid="uid://bi5mlcmkojn1h" path="res://assets/sketchfab/shift_happens/scene.gltf" id="2_i5521"]
-[ext_resource type="Script" path="res://radial_sky_rays/radial_sky_rays.gd" id="2_sk7g2"]
+[ext_resource type="Script" uid="uid://b4w60fm7nobrv" path="res://radial_sky_rays/radial_sky_rays.gd" id="2_sk7g2"]
 [ext_resource type="LabelSettings" uid="uid://ci6w1v6r1ycro" path="res://label_settings.tres" id="4_frs6v"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ptioq"]
@@ -26,19 +26,13 @@ tonemap_mode = 2
 [sub_resource type="CompositorEffect" id="CompositorEffect_rmrg6"]
 resource_local_to_scene = false
 resource_name = ""
-enabled = true
+enabled = false
 effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("2_sk7g2")
-half_size = true
-sun_location = Vector3(-0.628495, 0.599313, -0.495801)
+sun_location = Vector3(-0.62849486, 0.5993128, -0.49580064)
 sun_size = 250.0
-sun_fade_size = 50.0
-radial_blur_samples = 32
-radial_blur_radius = 150.0
-radial_blur_effect_amount = 0.9
-gaussian_blur_size = 16.0
 
 [sub_resource type="Compositor" id="Compositor_epc3m"]
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_rmrg6")])
@@ -84,7 +78,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/MarginContainer/VBoxContainer/Enabled"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 27.0
 offset_right = 100.0
 offset_bottom = 23.0
@@ -94,7 +88,7 @@ text = "Enabled"
 layout_mode = 2
 
 [node name="Label" type="Label" parent="UI/MarginContainer/VBoxContainer/HalfSize"]
-layout_mode = 2
+layout_mode = 0
 offset_left = 27.0
 offset_right = 100.0
 offset_bottom = 23.0

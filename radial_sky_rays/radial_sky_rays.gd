@@ -161,8 +161,8 @@ func _render_callback(p_effect_callback_type, p_render_data):
 
 			if !render_scene_buffers.has_texture(context, texture):
 				var usage_bits : int = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT
-				render_scene_buffers.create_texture(context, texture, RenderingDevice.DATA_FORMAT_R16_UNORM, usage_bits, RenderingDevice.TEXTURE_SAMPLES_1, effect_size, 1, 1, true)
-				render_scene_buffers.create_texture(context, pong_texture, RenderingDevice.DATA_FORMAT_R16_UNORM, usage_bits, RenderingDevice.TEXTURE_SAMPLES_1, effect_size, 1, 1, true)
+				render_scene_buffers.create_texture(context, texture, RenderingDevice.DATA_FORMAT_R16_UNORM, usage_bits, RenderingDevice.TEXTURE_SAMPLES_1, effect_size, 1, 1, true, false)
+				render_scene_buffers.create_texture(context, pong_texture, RenderingDevice.DATA_FORMAT_R16_UNORM, usage_bits, RenderingDevice.TEXTURE_SAMPLES_1, effect_size, 1, 1, true, false)
 
 			rd.draw_command_begin_label("Radial Sky Rays", Color(1.0, 1.0, 1.0, 1.0))
 

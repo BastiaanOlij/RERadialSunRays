@@ -29,4 +29,3 @@ func _on_enabled_toggled(toggled_on):
 func _on_half_size_toggled(toggled_on):
 	if !!Engine.is_editor_hint():
 		radial_sky_rays.half_size = toggled_on
-
