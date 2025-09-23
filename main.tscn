@@ -26,7 +26,7 @@ tonemap_mode = 2
 [sub_resource type="CompositorEffect" id="CompositorEffect_rmrg6"]
 resource_local_to_scene = false
 resource_name = ""
-enabled = false
+enabled = true
 effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
