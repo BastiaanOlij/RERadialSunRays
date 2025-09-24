@@ -269,9 +269,11 @@ func _render_callback(p_effect_callback_type, p_render_data):
 					##############################################################
 					# Step 3: Apply gaussian blur
 
+					# Read from texture image
 					uniform = get_image_uniform(texture_image)
 					texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 0, [ uniform ])
 
+					# Write to pong texture image
 					uniform = get_image_uniform(pong_texture_image)
 					pong_texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 1, [ uniform ])
 
@@ -304,6 +306,14 @@ func _render_callback(p_effect_callback_type, p_render_data):
 					push_constant.push_back(gaussian_blur_size)
 
 					rd.draw_command_begin_label("Apply vertical gaussian blur " + str(view), Color(1.0, 1.0, 1.0, 1.0))
+
+					# Read from pong texture image
+					uniform = get_image_uniform(pong_texture_image)
+					pong_texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 0, [ uniform ])
+
+					# Write to texture image
+					uniform = get_image_uniform(texture_image)
+					texture_uniform_set = UniformSetCacheRD.get_cache(gaussian_blur_shader, 1, [ uniform ])
 
 					compute_list = rd.compute_list_begin()
 					rd.compute_list_bind_compute_pipeline(compute_list, gaussian_blur_pipeline)
